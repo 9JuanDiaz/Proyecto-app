@@ -1,0 +1,31 @@
+document.getElementById('registrationForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+        const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, email, password })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            document.getElementById('message').textContent = 'Registro exitoso. Por favor, verifique su correo electrónico.';
+            document.getElementById('message').classList.add('alert', 'alert-success');
+        } else {
+            document.getElementById('message').textContent = result.message;
+            document.getElementById('message').classList.add('alert', 'alert-danger');
+        }
+    } catch (error) {
+        document.getElementById('message').textContent = 'Ocurrió un error durante el registro. Por favor, intente de nuevo.';
+        document.getElementById('message').classList.add('alert', 'alert-danger');
+    }
+});
+
